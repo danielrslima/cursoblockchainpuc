@@ -28,7 +28,6 @@ constant = uint256 constant (tem sempre que informar o numero/valor)
         }
 
 // "contructor" sempre tem que ser publico
-
     function valorDoAluguel() public view returns (uint256) {
         return valor;
     }
@@ -41,7 +40,12 @@ constant = uint256 constant (tem sempre que informar o numero/valor)
         valorMulta = valorMulta/totalMesesContrato;
         valorMulta = valorMulta*mesesRestantes;
         return valorMulta;
-        
+    }
+    
+    function reajustaAluguel(uint256 percentualReajuste) public {
+        uint256 valorDoAcrescimo = 0;
+        valorDoAcrescimo = ((valor*percentualReajuste)/100);
+        valor = valor + valorDoAcrescimo;
     }
         
 }
