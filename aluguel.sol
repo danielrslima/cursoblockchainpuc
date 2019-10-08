@@ -47,5 +47,9 @@ constant = uint256 constant (tem sempre que informar o numero/valor)
         valorDoAcrescimo = ((valor*percentualReajuste)/100);
         valor = valor + valorDoAcrescimo;
     }
-        
-}
+    
+    function retificacaoValorAluguel(uint256 valorCerto) public {
+
+        valor = valorCerto;
+    }
+}  
