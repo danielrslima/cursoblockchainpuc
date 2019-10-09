@@ -28,7 +28,7 @@ constant = uint256 constant (tem sempre que informar o numero/valor)
         }
 
 // "contructor" sempre tem que ser publico
-    function valorDoAluguel() public view returns (uint256) {
+    function valorAtualDoAluguel() public view returns (uint256) {
         return valor;
     }
     
@@ -43,13 +43,24 @@ constant = uint256 constant (tem sempre que informar o numero/valor)
     }
     
     function reajustaAluguel(uint256 percentualReajuste) public {
+        if (percentualReajuste > 20)
+        {
+            percentualReajuste = 20;
+        }
         uint256 valorDoAcrescimo = 0;
         valorDoAcrescimo = ((valor*percentualReajuste)/100);
         valor = valor + valorDoAcrescimo;
     }
     
     function retificacaoValorAluguel(uint256 valorCerto) public {
-
         valor = valorCerto;
     }
-}  
+    
+    function aplicaMulta (uint256 mesesRestantes, uint256 percentual) public{
+        require(mesesRestantes < 30, "Periodo de contrato invaido");
+        for (uint256 i=1; i<mesesRestantes; i++) {
+            valor = valor+((valor*percentual)/100);
+        }
+    }    
+}    
+ 
