@@ -1,4 +1,4 @@
-pragma solidity >=0.5.1;
+pragma solidity >=0.5.12;
 
 contract Escrow {
     address payable public comprador; 
@@ -42,4 +42,4 @@ contract Escrow {
         preco = _preco;
         entregue = false;
     }
-} 
+}
