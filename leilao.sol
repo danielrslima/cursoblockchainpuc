@@ -65,7 +65,8 @@ contract Leilao {
             3o  é o incrementador (ou decrementador) do indice
         */
         for (uint i=0; i<ofertantes.length; i++) {
-            Ofertante memory leiloeiroPerdedor = ofertantes[i];
+            Ofertante storage leiloeiroPerdedor = ofertantes[i];
+            // 
             if (!leiloeiroPerdedor.jaFoiReembolsado) {
                 //quando tem uma condicao com uma exclamacao(!) estou comparando como false
                 //se eu quisesse eu poderia escrever sem o (!) ficando como (leiloeiroPerdedor.jaFoiReembolsado == false)
