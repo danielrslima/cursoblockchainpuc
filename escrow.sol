@@ -2,9 +2,6 @@ pragma solidity >=0.5.12;
 
 contract Escrow {
     
-/*Escrow é uma garantia prevista em um contrato(p.ex. Compra e venda) ou acordo comercial que é mantida sob a responsabilidade de um terceiro(normalmente um banco) até que as cláusulas desse acordo sejam cumpridas por ambas as partes envolvidas no negócio;
-Poderia dizer que o mercadopago se assemelha a um escrow (pois assegura que se o produto nao for recebido pelo comprador ele nao transfere o dinheiro ao vendedor */    
-    
     address payable public comprador; 
     address payable public vendedor;
     uint256 public preco;
