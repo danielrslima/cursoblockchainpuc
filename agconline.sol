@@ -1,4 +1,4 @@
-pragma  solidity 0.5.12;
+pragma solidity 0.5.12;
 
 
 contract AgcOnline {
@@ -41,7 +41,7 @@ contract AgcOnline {
     }
 
     modifier somenteAdministradorJudicial() {
-        require(administradorJudicial == msg.sender, "Somente o presidente pode realizar essa operação");
+        require(administradorJudicial == msg.sender, "Somente o Administrador Judicial pode realizar essa operação");
         _;
     }
 
@@ -77,9 +77,9 @@ contract AgcOnline {
         dataFinalVotacao = qualDataFinalVotacao;
     }
 
-    function incluiVotante(address payable enderecoVotante, string memory identificadorID, uint8 classeDeCredores,  uint valorDoCreditoHabilitado, uint porcentagemSobreTotalDeCreditosVotanteDaClasse, uint porcentagemSobreTotalDeCreditoVotanteDaAssembleia, uint totalDeVotantesNaClasse) public somenteSecretario {
+    function incluiVotante(address payable enderecoVotante, string memory identificadorID, uint8 classeDeCredores,  uint valorDoCreditoHabilitado, uint porcentagemSobreTotalDeCreditosVotanteDaClasse, uint porcentagemSobreTotalDeCreditoVotanteDaAssembleia) public somenteSecretario {
         require(enderecoVotante != address(0), "O votante deve ter um endereco valido");
-        Votante memory novoVotante = Votante(enderecoVotante, identificadorID, classeDeCredores, valorDoCreditoHabilitado, porcentagemSobreTotalDeCreditosVotanteDaClasse, porcentagemSobreTotalDeCreditoVotanteDaAssembleia, totalDeVotantesNaClasse, true);
+        Votante memory novoVotante = Votante(enderecoVotante, identificadorID, classeDeCredores, valorDoCreditoHabilitado, porcentagemSobreTotalDeCreditosVotanteDaClasse, porcentagemSobreTotalDeCreditoVotanteDaAssembleia, true);
         votantes[enderecoVotante] = novoVotante;
         numeroVotantes.push(novoVotante);
     }
@@ -101,7 +101,7 @@ contract AgcOnline {
         if (propostaTemporario.existe) {
             Votante storage votanteTemporario = votantes[msg.sender];
             if (votanteTemporario.existe) {
-                if (!propostaTemporario.quemVotou[votanteTemporario.conta].existe) {
+                if (!propostaTemporario.quemVotou[votanteTemporario.enderecoVotante].existe) {
                     if (favoravelAProposta > 0) {
                         propostaTemporario.quotaDeVotos = propostaTemporario.quotaDeVotos + votanteTemporario.quotaDeVotos;
                     }
