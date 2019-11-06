@@ -1,4 +1,4 @@
-pragma solidity 0.5.12;
+pragma solidity >=0.5.12;
 
 
 contract AgcOnline {
@@ -17,6 +17,7 @@ contract AgcOnline {
     struct Votante {
         address payable enderecoVotante;
         string identificadorID;
+        uint quantidadeTotaDeVotantesPresentesNaAssembleia;
         uint8 classeDeCredores;
         uint valorDoCreditoHabilitado;
         uint porcentagemSobreTotalDeCreditosVotanteDaClasse;
@@ -77,9 +78,9 @@ contract AgcOnline {
         dataFinalVotacao = qualDataFinalVotacao;
     }
 
-    function incluiVotante(address payable enderecoVotante, string memory identificadorID, uint8 classeDeCredores,  uint valorDoCreditoHabilitado, uint porcentagemSobreTotalDeCreditosVotanteDaClasse, uint porcentagemSobreTotalDeCreditoVotanteDaAssembleia) public somenteSecretario {
+    function incluiVotante(address payable enderecoVotante, string memory identificadorID, uint quantidadeTotaDeVotantesPresentesNaAssembleia, uint8 classeDeCredores,  uint valorDoCreditoHabilitado, uint porcentagemSobreTotalDeCreditosVotanteDaClasse, uint porcentagemSobreTotalDeCreditoVotanteDaAssembleia) public somenteSecretario {
         require(enderecoVotante != address(0), "O votante deve ter um endereco valido");
-        Votante memory novoVotante = Votante(enderecoVotante, identificadorID, classeDeCredores, valorDoCreditoHabilitado, porcentagemSobreTotalDeCreditosVotanteDaClasse, porcentagemSobreTotalDeCreditoVotanteDaAssembleia, true);
+        Votante memory novoVotante = Votante(enderecoVotante, identificadorID, quantidadeTotaDeVotantesPresentesNaAssembleia, classeDeCredores, valorDoCreditoHabilitado, porcentagemSobreTotalDeCreditosVotanteDaClasse, porcentagemSobreTotalDeCreditoVotanteDaAssembleia, true);
         votantes[enderecoVotante] = novoVotante;
         numeroVotantes.push(novoVotante);
     }
@@ -103,10 +104,10 @@ contract AgcOnline {
             if (votanteTemporario.existe) {
                 if (!propostaTemporario.quemVotou[votanteTemporario.enderecoVotante].existe) {
                     if (favoravelAProposta > 0) {
-                        propostaTemporario.quotaDeVotos = propostaTemporario.quotaDeVotos + votanteTemporario.quotaDeVotos;
+                        propostaTemporario.quantidadeTotaDeVotantesPresentesNaAssembleia = propostaTemporario.quantidadeTotaDeVotantesPresentesNaAssembleia + votanteTemporario.quantidadeTotaDeVotantesPresentesNaAssembleia;
                     }
                     emit Votou(msg.sender, numeroProposta, favoravelAProposta);
-                    propostaTemporario.quemVotou[votanteTemporario.conta] = votanteTemporario;
+                    propostaTemporario.quemVotou[votanteTemporario.enderecoVotante] = votanteTemporario;
                     return true;
                 }
             } 
@@ -117,7 +118,7 @@ contract AgcOnline {
     function pesquisarVotante(address indiceVotante) public view returns (address, uint, uint8, string memory) {
         Votante memory votanteTemporario = votantes[indiceVotante];
         if (votanteTemporario.existe == true) {
-            return (votanteTemporario.conta, votanteTemporario.valorDoCreditoHabilitado, votanteTemporario.classeDeCredores, votanteTemporario.identificadorID);
+            return (votanteTemporario.enderecoVotante, votanteTemporario.valorDoCreditoHabilitado, votanteTemporario.classeDeCredores, votanteTemporario.identificadorID);
         } else {
             string memory none = "";
             return (address(0), 0, 0, none);
@@ -129,7 +130,7 @@ contract AgcOnline {
         require(indiceVotante <= numeroVotantes.length, "Indice informado é maior que o numero de votantes");
         Votante memory votanteTemporario = numeroVotantes[indiceVotante];
         if (votanteTemporario.existe == true) {
-            return (votanteTemporario.conta, votanteTemporario.porcentagemSobreTotalDeCreditosVotanteDaClasse, votanteTemporario.porcentagemSobreTotalDeCreditoVotanteDaAssembleia, votanteTemporario.identificadorID);
+            return (votanteTemporario.enderecoVotante, votanteTemporario.porcentagemSobreTotalDeCreditosVotanteDaClasse, votanteTemporario.porcentagemSobreTotalDeCreditoVotanteDaAssembleia, votanteTemporario.identificadorID);
         } else {
             string memory none = "";
             return (address(0), 0, 0, none);
@@ -157,7 +158,7 @@ contract AgcOnline {
     function propostaAprovada(uint numeroProposta) public view returns (bool)  {
         Proposta memory propostaTemporario = propostas[numeroProposta];
         if (propostaTemporario.existe) {
-            return propostaTemporario.quotaDeVotos>=propostaTemporario.quotaMinimaParaAprovacao;
+            return propostaTemporario.quantidadeTotaDeVotantesPresentesNaAssembleia>=propostaTemporario.quorumMinimoParaAprovacaoDaAssembleia;
         } else {
             return false;
         }
